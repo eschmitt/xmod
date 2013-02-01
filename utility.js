@@ -1,10 +1,11 @@
 ;(function (window, exporter, undefined) {
 
-  var utility = {} 
+  var xmod = {} 
   
   //+ getFreeGlobal :: a -> b
     , getFreeGlobal = function(_window) {
-        var free_global = typeof global == 'object' && global;
+        var env_global = global
+          , free_global = typeof env_global == 'object' && env_global;
         if (free_global.global === free_global) {
           return free_global;
         }
@@ -33,11 +34,12 @@
   //+ exportModule :: String -> Module -> IO
     , exportModule = function(name, _module, _exporter) {
         var define_exists = typeof define == 'function'
-          , has_amd_property = define ? typeof define.amd == 'object' && define.amd : false
+          , has_amd_property = define_exists ? typeof define.amd == 'object' && define.amd : false
           , using_AMD_loader = define_exists && has_amd_property
-          , module_exists = typeof module == 'object' && module
-          , has_exports_property = module ? module.exports == _exporter : false
-          , using_nodejs_or_ringojs = module_exists && has_exports_property
+          , env_module = module
+          , env_module_exists = typeof env_module == 'object' && env_module
+          , has_exports_property = env_module_exists ? env_module.exports == _exporter : false
+          , using_nodejs_or_ringojs = env_module_exists && has_exports_property
           ;
 
         if (using_AMD_loader) {
@@ -66,11 +68,12 @@
       }
     ;
 
-  utility.expose = exposeFunctionsToEnvironment;
-  utility.noConflict = noConflict;
-  utility.export = exportModule;
+  xmod.getFreeGlobal = getFreeGlobal;
+  xmod.expose = exposeFunctionsToEnvironment;
+  xmod.noConflict = noConflict;
+  xmod.export = exportModule;
 
-  exportModule('utility', utility, exporter);
+  exportModule('xmod', xmod, exporter);
 
 }( typeof window != 'undefined' ? window : {}
  , typeof exports == 'object' && exports

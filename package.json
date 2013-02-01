@@ -1,6 +1,6 @@
 { 
-  "name": "utility",
-  "description": "A collection of utility functions for exporting/exposing JavaScript modules to different environments",
+  "name": "xmod",
+  "description": "A collection of helper functions for exporting/exposing JavaScript modules to different environments",
   "version": "0.1.0",
   "author": "loop/recur <info@looprecur.com>",
   "maintainers": [
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/eschmitt/utility.git"
+    "url": "http://github.com/eschmitt/xmod.git"
   },
   "devDependencies": {
     "jasmine-node": "*"
@@ -21,5 +21,5 @@
   "scripts": {
     "test": "jasmine-node --coffee specs"
   },
-  "main": "./utility.js"
+  "main": "./xmod.js"
 }
