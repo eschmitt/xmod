@@ -1,4 +1,4 @@
 utility
 =======
 
-A namespaced collection of common utilty functions useful for building JavaScript libraries.
+A collection of utilty functions for exporting/exposing JavaScript modules to different environments.
