@@ -33,7 +33,7 @@
         };
       }
 
-  //+ exportModule :: String -> Module -> IO
+  //+ exportModule :: String -> Module -> Export -> IO
     , exportModule = function(name, _module, _exporter) {
         console.log('inside exportModule()');
         console.log('module name: ' name);
