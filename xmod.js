@@ -12,13 +12,15 @@
         return _window;
       }
 
+//TODO omit noConflict and getFreeGlobal from exposure to env
   //+ exposeFunctionsToEnvironment :: a -> IO
     , exposeFunctionsToEnvironment = function(env) {
-        var f, namespace = this;
-        env = env || window;
-        for (f in namespace) {
-          if (f !== 'expose' && namespace.hasOwnProperty(f)) {
-            env[f] = namespace[f];
+        var f, win, mod = this;
+        win = getFreeGlobal(window);
+        env = env || win;
+        for (f in mod) {
+          if (f !== 'expose' && mod.hasOwnProperty(f)) {
+            env[f] = mod[f];
           }
         }
       }
@@ -71,7 +73,7 @@
   xmod.getFreeGlobal = getFreeGlobal;
   xmod.expose = exposeFunctionsToEnvironment;
   xmod.noConflict = noConflict;
-  xmod.export = exportModule;
+  xmod.exportModule = exportModule;
 
   exportModule('xmod', xmod, exporter);
 
