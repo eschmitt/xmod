@@ -33,10 +33,10 @@
   //+ exportModule :: String -> Module -> IO
     , exportModule = function(name, _module, _exporter) {
         var define_exists = typeof define == 'function'
-          , has_amd_property = typeof define.amd == 'object' && define.amd
+          , has_amd_property = define ? typeof define.amd == 'object' && define.amd : false
           , using_AMD_loader = define_exists && has_amd_property
           , module_exists = typeof module == 'object' && module
-          , has_exports_property = module.exports == _exporter
+          , has_exports_property = module ? module.exports == _exporter : false
           , using_nodejs_or_ringojs = module_exists && has_exports_property
           ;
 
