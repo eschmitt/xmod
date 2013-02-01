@@ -1,4 +1,4 @@
-expose
-======
+utility
+=======
 
-module containing a function that allows you to expose namespaced functions to the global namespace
+A namespaced collection of common utilty functions useful for building JavaScript libraries.
