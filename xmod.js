@@ -35,6 +35,10 @@
 
   //+ exportModule :: String -> Module -> IO
     , exportModule = function(name, _module, _exporter) {
+        console.log('inside exportModule()');
+        console.log('module name: ' name);
+        console.log('========= module ========');
+        console.dir(module)
         var define_exists = typeof define == 'function'
           , has_amd_property = define_exists ? typeof define.amd == 'object' && define.amd : false
           , using_AMD_loader = define_exists && has_amd_property
