@@ -1,7 +1,7 @@
-;(function (window, exporter, undefined) {
+;(function (window, undefined) {
 
   var xmod = {} 
-  
+
   //+ getFreeGlobal :: a -> b
     , getFreeGlobal = function(_window) {
         var env_global = global
@@ -24,7 +24,7 @@
           }
         }
       }
-  
+
   //+ noConflict :: String -> b -> f
     , noConflict = function(conflicting_lib, _window) {
         return function() {
@@ -33,19 +33,14 @@
         };
       }
 
-  //+ exportModule :: String -> Module -> Export -> IO
-    , exportModule = function(name, _module, _exporter) {
-        console.log('inside exportModule()');
-        console.log('module name: ' name);
-        console.log('========= module ========');
-        console.dir(module)
+  //+ exportModule :: String -> Module -> IO
+    , exportModule = function(name, my_module) {
         var define_exists = typeof define == 'function'
           , has_amd_property = define_exists ? typeof define.amd == 'object' && define.amd : false
           , using_AMD_loader = define_exists && has_amd_property
-          , env_module = module
-          , env_module_exists = typeof env_module == 'object' && env_module
-          , has_exports_property = env_module_exists ? env_module.exports == _exporter : false
-          , using_nodejs_or_ringojs = env_module_exists && has_exports_property
+          , global_exports = typeof exports == 'object' && exports
+          , global_module = typeof module == 'object' && module
+          , using_nodejs_or_ringojs = global_module ? global_module.exports == global_exports : false
           ;
 
         if (using_AMD_loader) {
@@ -54,22 +49,24 @@
           // script and not intended to be loaded as module. The global
           // assignment can be reverted in the module via its
           // "noConflict()" method.
-          window[name] = _module;
+          window[name] = my_module;
 
           // Define an anonymous AMD module
-          define(function () { return _module; });
+          define(function () { return my_module; });
         }
 
         // Check for "exports" after "define", in case a build optimizer adds
         // an "exports" object.
-        else if (_exporter) {
+        else if (global_exports) {
           if (using_nodejs_or_ringojs) {
-            module.exports = _module;
+            global_module.exports = my_module;
           }
-          // Narwhal or RingoJS v0.7.0-
-          else {
-            _exporter[name] = _module;
+          else { // Narwhal or RingoJS v0.7.0-
+            global_exports[name] = my_module;
           }
+        }
+        else { // browser or Rhino
+          window[name] = my_module;
         }
       }
     ;
@@ -77,10 +74,6 @@
   xmod.getFreeGlobal = getFreeGlobal;
   xmod.expose = exposeFunctionsToEnvironment;
   xmod.noConflict = noConflict;
-  xmod.exportModule = exportModule;
+  exportModule('xmod', xmod);
 
-  exportModule('xmod', xmod, exporter);
-
-}( typeof window != 'undefined' ? window : {}
- , typeof exports == 'object' && exports
- ));
+}(this));
